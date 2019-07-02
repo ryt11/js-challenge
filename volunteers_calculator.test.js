@@ -59,10 +59,32 @@ test('testVolunteersNeeded', function() {
 test('testResultsWithoutDayNames', function() {
   var calculator = new VolunteersCalculator();
 
-  var volunteers = [17,20];
+  var data = [[10,20,10],
+              [20,40,20]];
+
+  calculator.data = data;
+  calculator.daysCount = data.length;
+
+  var volunteers = calculator.getVolunteersNeeded();
 
   var computedResults = calculator.getResults(volunteers);
 
-  expect(computedResults[0]).toEqual('17 additional volunteers are needed on day 0')
-  expect(computedResults[1]).toEqual('20 additional volunteers are needed on day 1')
+  expect(computedResults[0]).toEqual('10.00 additional volunteers are needed on day 0')
+  expect(computedResults[1]).toEqual('20.00 additional volunteers are needed on day 1')
+});
+
+test('testResultsWithDayNames', function() {
+  var calculator = new VolunteersCalculator();
+  var data = [[10,20,10,'Monday'],
+              [20,40,20,'Tuesday']];
+
+  calculator.data = data;
+  calculator.daysCount = data.length;
+
+  var volunteers = calculator.getVolunteersNeeded();
+
+  var computedResults = calculator.getResults(volunteers);
+
+  expect(computedResults[0]).toEqual('10.00 additional volunteers are needed on Monday')
+  expect(computedResults[1]).toEqual('20.00 additional volunteers are needed on Tuesday')
 });

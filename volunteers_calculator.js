@@ -49,7 +49,9 @@ var VolunteersCalculator = module.exports = function(){
     getResults: function(volunteers) {
       this.results = [];
       for(var i = 0; i< volunteers.length; i++) {
-        var result = (volunteers[i]+" additional volunteers are needed on day "+i)
+        var dayNameExists = typeof(this.data[i][3]) !== 'undefined';
+        var dayDescription = (dayNameExists) ? this.data[i][3] : 'day '+i;
+        var result = (volunteers[i]+" additional volunteers are needed on "+dayDescription);
         this.results.push(result)
         console.log(result)
       }
