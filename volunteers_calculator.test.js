@@ -56,6 +56,27 @@ test('testVolunteersNeeded', function() {
   expect(computedVolunteersNeeded[2]).toEqual('0.24');
 });
 
+test('testResultsDescendingByVolunteersNeeded', function() {
+  var calculator = new VolunteersCalculator();
+
+  var data = [[2, 50, 10],
+              [10,20,10],
+              [20,40,20],
+              [1, 40, 1], //39 people needed should be at top
+              ];
+
+  calculator.data = data;
+  calculator.daysCount = data.length;
+
+  var volunteers = calculator.getVolunteersNeeded();
+
+  var computedResults = calculator.getResults(volunteers);
+  expect(computedResults[0]).toEqual('39.00 additional volunteers are needed on day 3')
+  expect(computedResults[1]).toEqual('20.00 additional volunteers are needed on day 2')
+  expect(computedResults[2]).toEqual('10.00 additional volunteers are needed on day 1')
+  expect(computedResults[3]).toEqual('8.00 additional volunteers are needed on day 0')
+});
+
 test('testResultsWithoutDayNames', function() {
   var calculator = new VolunteersCalculator();
 
@@ -69,8 +90,8 @@ test('testResultsWithoutDayNames', function() {
 
   var computedResults = calculator.getResults(volunteers);
 
-  expect(computedResults[0]).toEqual('10.00 additional volunteers are needed on day 0')
-  expect(computedResults[1]).toEqual('20.00 additional volunteers are needed on day 1')
+  expect(computedResults[0]).toEqual('20.00 additional volunteers are needed on day 1')
+  expect(computedResults[1]).toEqual('10.00 additional volunteers are needed on day 0')
 });
 
 test('testResultsWithDayNames', function() {
@@ -85,6 +106,6 @@ test('testResultsWithDayNames', function() {
 
   var computedResults = calculator.getResults(volunteers);
 
-  expect(computedResults[0]).toEqual('10.00 additional volunteers are needed on Monday')
-  expect(computedResults[1]).toEqual('20.00 additional volunteers are needed on Tuesday')
+  expect(computedResults[0]).toEqual('20.00 additional volunteers are needed on Tuesday')
+  expect(computedResults[1]).toEqual('10.00 additional volunteers are needed on Monday')
 });

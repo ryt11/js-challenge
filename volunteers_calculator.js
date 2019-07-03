@@ -22,11 +22,12 @@ var VolunteersCalculator = module.exports = function(){
         var daysCount = (this.volunteerData.length-1);
         var data = this.volunteerData.splice(1);
 
+
         self.daysCount = daysCount;
         self.data = data;
         done(daysCount, data);
-      });
-    },
+        });
+       },
 
     dayCount: function() {
       var dayCount = this.data.length;
@@ -46,14 +47,33 @@ var VolunteersCalculator = module.exports = function(){
       return volunteersNeeded;
     },
 
+    appendVolunteersToData: function (volunteers) {
+      for(var i = 0; i < this.daysCount; i++) {
+        this.data[i].push(i); //pushes line number for day tracking when day is not provided
+        this.data[i].push(volunteers[i]);
+      };
+
+    },
+
+    sortDataVolunteersDescending: function (volunteers) {
+      this.appendVolunteersToData(volunteers);
+      var sortedDescending = this.data.sort( function( x, y ) { return y[y.length - 1] - x[x.length - 1]; } )
+      return sortedDescending;
+    },
+
     getResults: function(volunteers) {
+      var descendingData = this.sortDataVolunteersDescending(volunteers);
       this.results = [];
-      for(var i = 0; i< volunteers.length; i++) {
-        var dayNameExists = typeof(this.data[i][3]) !== 'undefined';
-        var dayDescription = (dayNameExists) ? this.data[i][3] : 'day '+i;
-        var result = (volunteers[i]+" additional volunteers are needed on "+dayDescription);
-        this.results.push(result)
-        console.log(result)
+      var dayCount = this.daysCount
+      for(var i = 0; i< dayCount; i++) {
+        console.log(descendingData);
+        var dataLength = descendingData[i].length;
+        var dayNameExists = dataLength > 5; //The max array length a line not containing a day will have is 5
+        var dayDescription = (dayNameExists) ? descendingData[i][3] : 'day '+descendingData[i][dataLength - 2];
+        var result = (descendingData[i][dataLength - 1]+" additional volunteers are needed on "+dayDescription);
+        this.results.push(result);
+        console.log(result);
+
       }
       return this.results;
     },
